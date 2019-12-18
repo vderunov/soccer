@@ -1,0 +1,12 @@
+.PlayerCard {
+    width: 200px;
+    height: 280px;
+    margin: 10px;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #dfe4ea;
+    transition: 0.5s;
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .25);
+}
