@@ -13,17 +13,16 @@ const NavigationItems = props => (
                 Favorite players
             </NavigationItem>
         ) : null}
-        {!props.isAuthenticated ? (
-            <NavigationItem link="/auth">Authenticate</NavigationItem>
-        ) : (
-            <NavigationItem link="/logout">Logout</NavigationItem>
-        )}
-
         {props.isAuthenticated ? (
             <NavigationItem link="/registrationPlayer">
                 Registration player
             </NavigationItem>
         ) : null}
+        {!props.isAuthenticated ? (
+            <NavigationItem link="/auth">Authenticate</NavigationItem>
+        ) : (
+            <NavigationItem link="/logout">Logout</NavigationItem>
+        )}
     </ul>
 );
 

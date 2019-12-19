@@ -21,11 +21,12 @@ export const fetchFavoritePlayerStart = () => {
     };
 };
 
-export const fetchFavoritePlayer = token => {
+export const fetchFavoritePlayer = (token, userId) => {
     return dispatch => {
         dispatch(fetchFavoritePlayerStart());
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
         axios
-            .get('favoritePlayers.json?auth=' + token)
+            .get('favoritePlayers.json' + queryParams)
             .then(response => {
                 const fetchPlayersStart = [];
                 for (let key in response.data) {

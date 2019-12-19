@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PlayerCard from '../../components/UI/PlayerCard/PlayerCard';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import classes from '../Team/Team.module.css';
+import classes from './FavoritePlayers.module.css';
 import * as action from '../../store/actions/index';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import axios from '../../axios-players';
 
 class FavoritePlayers extends Component {
     componentDidMount() {
-        this.props.onFetchFavoritePlayer(this.props.token);
+        this.props.onFetchFavoritePlayer(this.props.token, this.props.userId);
     }
 
     goToMoreInfoHandler = () => {
@@ -29,6 +31,7 @@ class FavoritePlayers extends Component {
                         physical={player.physical}
                         position={player.position}
                         goToMoreInfo={this.goToMoreInfoHandler}
+                        isAuth={this.props.isAuthenticated}
                     />
                 );
             });
@@ -39,8 +42,8 @@ class FavoritePlayers extends Component {
         }
         return (
             <div>
-                <h1>FavoritePlayers</h1>
-                <div className={classes.Team}>{players}</div>
+                <h1>Favorite Players</h1>
+                <div className={classes.FavoritePlayer}>{players}</div>
             </div>
         );
     }
@@ -50,15 +53,16 @@ const mapStateToProps = state => {
     return {
         favoritePlayers: state.favoritePlayers.players,
         loading: state.favoritePlayers.loading,
-        token: state.auth.token
+        token: state.auth.token,
+        isAuthenticated: state.auth.token !== null,
+        userId: state.auth.userId
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchFavoritePlayer: token =>
-            dispatch(action.fetchFavoritePlayer(token))
+        onFetchFavoritePlayer: (token, userId) => dispatch(action.fetchFavoritePlayer(token, userId))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FavoritePlayers);
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(FavoritePlayers, axios));

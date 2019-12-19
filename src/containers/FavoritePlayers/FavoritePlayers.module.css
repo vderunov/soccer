@@ -1,0 +1,9 @@
+.FavoritePlayer {
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+}
+
+h1 {
+    text-align: center;
+}

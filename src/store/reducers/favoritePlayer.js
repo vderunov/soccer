@@ -26,9 +26,7 @@ const reduce = (state = initialState, action) => {
         case actionTypes.ADD_FAVORITE_PLAYER_SUCCESS:
             return {
                 ...state,
-                favoritePlayers: state.favoritePlayers.concat(
-                    action.favoritePlayerData
-                )
+                favoritePlayers: state.favoritePlayers.concat(action.favoritePlayerData)
             };
         case actionTypes.ADD_FAVORITE_PLAYER_FAIL:
             return {

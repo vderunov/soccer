@@ -5,21 +5,21 @@ import * as action from '../../store/actions/index';
 import PlayerCard from '../../components/UI/PlayerCard/PlayerCard';
 import classes from './Team.module.css';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import axios from '../../axios-players';
 
 class Team extends Component {
     componentDidMount() {
         this.props.onFetchPlayers();
     }
 
-    // shouldComponentUpdate(nextProps) {
+    // shouldComponentUpdate(nextProps, nextState) {
     //     return nextProps.players !== this.props.players;
     // }
 
     getIdClickedPlayerHandler = event => {
         const idPlayer = event.target.closest('[data-id]').dataset.id;
-        const favoritePlayerData = this.props.players.find(
-            player => player.id === idPlayer
-        );
+        const favoritePlayerData = this.props.players.find(player => player.id === idPlayer);
 
         if (event.target.dataset.btn === 'moreInfo') {
             this.props.onAddMoreInfoPlayer(favoritePlayerData);
@@ -27,10 +27,7 @@ class Team extends Component {
         }
 
         if (event.target.dataset.btn === 'favorites') {
-            this.props.onAddFavoritePlayer(
-                favoritePlayerData,
-                this.props.token
-            );
+            this.props.onAddFavoritePlayer(favoritePlayerData, this.props.token);
         }
     };
 
@@ -51,6 +48,7 @@ class Team extends Component {
                         goToMoreInfo={this.getIdClickedPlayerHandler}
                         addToFavorites={this.addToFavorites}
                         addFavoritePlayer={this.getIdClickedPlayerHandler}
+                        isAuth={this.props.isAuthenticated}
                     />
                 );
             });
@@ -61,10 +59,10 @@ class Team extends Component {
         }
 
         return (
-            <div className={classes.Team}>
+            <>
                 <h1>Team</h1>
-                {players}
-            </div>
+                <div className={classes.Team}>{players}</div>
+            </>
         );
     }
 }
@@ -73,7 +71,8 @@ const mapStateToProps = state => {
     return {
         players: state.players.players,
         loading: state.players.loading,
-        token: state.auth.token
+        token: state.auth.token,
+        isAuthenticated: state.auth.token !== null
     };
 };
 
@@ -82,9 +81,8 @@ const mapDispatchToProps = dispatch => {
         onFetchPlayers: () => dispatch(action.fetchPlayers()),
         onAddFavoritePlayer: (favoritePlayerData, token) =>
             dispatch(action.addFavoritePlayer(favoritePlayerData, token)),
-        onAddMoreInfoPlayer: player =>
-            dispatch(action.addMoreInfoPlayer(player))
+        onAddMoreInfoPlayer: player => dispatch(action.addMoreInfoPlayer(player))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Team);
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Team, axios));

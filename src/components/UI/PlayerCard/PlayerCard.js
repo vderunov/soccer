@@ -19,10 +19,13 @@ const PlayerCard = props => {
             <Button clicked={props.goToMoreInfo} data="moreInfo">
                 More info
             </Button>
-            <Button clicked={props.addFavoritePlayer} data="favorites">
-                Add to favorites
-            </Button>
-            <Button clicked={() => {}}>Edit</Button>
+            {props.isAuth ? (
+                <Button clicked={props.addFavoritePlayer} data="favorites">
+                    Add to favorites
+                </Button>
+            ) : null}
+
+            {props.isAuth ? <Button clicked={() => {}}>Edit</Button> : null}
         </div>
     );
 };

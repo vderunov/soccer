@@ -134,36 +134,26 @@ class RegistrationPlayer extends Component {
         const formData = {};
 
         for (let formElementIdentifier in this.state.registrationForm) {
-            formData[formElementIdentifier] = this.state.registrationForm[
-                formElementIdentifier
-            ].value;
+            formData[formElementIdentifier] = this.state.registrationForm[formElementIdentifier].value;
         }
+
+        formData.userId = this.props.userId;
         this.props.onRegisterPlayer(formData);
     };
 
     inputChangedHandler = (event, inputIdentifier) => {
-        const updatedFormElement = updateObject(
-            this.state.registrationForm[inputIdentifier],
-            {
-                value: event.target.value,
-                valid: checkValidity(
-                    event.target.value,
-                    this.state.registrationForm[inputIdentifier].validation
-                ),
-                touched: true
-            }
-        );
-        const updatedRegistrationForm = updateObject(
-            this.state.registrationForm,
-            {
-                [inputIdentifier]: updatedFormElement
-            }
-        );
+        const updatedFormElement = updateObject(this.state.registrationForm[inputIdentifier], {
+            value: event.target.value,
+            valid: checkValidity(event.target.value, this.state.registrationForm[inputIdentifier].validation),
+            touched: true
+        });
+        const updatedRegistrationForm = updateObject(this.state.registrationForm, {
+            [inputIdentifier]: updatedFormElement
+        });
         let formIsValid = true;
 
         for (let inputIdentifier in updatedRegistrationForm) {
-            formIsValid =
-                updatedRegistrationForm[inputIdentifier].valid && formIsValid;
+            formIsValid = updatedRegistrationForm[inputIdentifier].valid && formIsValid;
         }
 
         this.setState({
@@ -194,9 +184,7 @@ class RegistrationPlayer extends Component {
                         value={formElement.config.value}
                         touched={formElement.config.touched}
                         shouldValidate={formElement.config.validation}
-                        changed={event =>
-                            this.inputChangedHandler(event, formElement.id)
-                        }
+                        changed={event => this.inputChangedHandler(event, formElement.id)}
                     />
                 ))}
                 <Button disabled={!this.state.formIsValid}>Register</Button>
@@ -204,13 +192,19 @@ class RegistrationPlayer extends Component {
         );
 
         return (
-            <div className={classes.RegistrationPlayer}>
-                <h2>Registration Player</h2>
-                {form}
-            </div>
+            <>
+                <h1>Registration player</h1>
+                <div className={classes.RegistrationPlayer}>{form}</div>;
+            </>
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        userId: state.auth.userId
+    };
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -218,4 +212,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(RegistrationPlayer);
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationPlayer);

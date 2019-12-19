@@ -74,7 +74,7 @@ export const registerPlayer = playerData => {
     return dispatch => {
         dispatch(registerPlayerStart());
         axios
-            .post('/players.json', playerData)
+            .post('/players.son', playerData)
             .then(response => {
                 dispatch(registerPlayerSuccess(response.data.name, playerData));
             })

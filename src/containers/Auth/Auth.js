@@ -49,10 +49,7 @@ class Auth extends Component {
         const updatedControls = updateObject(this.state.controls, {
             [controlName]: updateObject(this.state.controls[controlName], {
                 value: event.target.value,
-                valid: checkValidity(
-                    event.target.value,
-                    this.state.controls[controlName].validation
-                ),
+                valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
                 touched: true
             })
         });
@@ -61,11 +58,7 @@ class Auth extends Component {
 
     submitHandler = event => {
         event.preventDefault();
-        this.props.onAuth(
-            this.state.controls.email.value,
-            this.state.controls.password.value,
-            this.state.isSignup
-        );
+        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup);
     };
 
     switchAuthModeHandler = () => {
@@ -94,9 +87,7 @@ class Auth extends Component {
                 value={formElement.config.value}
                 touched={formElement.config.touched}
                 shouldValidate={formElement.config.validation}
-                changed={event =>
-                    this.inputChangedHandler(event, formElement.id)
-                }
+                changed={event => this.inputChangedHandler(event, formElement.id)}
             />
         ));
 
@@ -140,8 +131,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignup) =>
-            dispatch(actions.auth(email, password, isSignup))
+        onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup))
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
