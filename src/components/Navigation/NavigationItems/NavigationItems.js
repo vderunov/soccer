@@ -8,16 +8,8 @@ const NavigationItems = props => (
         <NavigationItem link="/" exact>
             Team
         </NavigationItem>
-        {props.isAuthenticated ? (
-            <NavigationItem link="/favoritePlayers">
-                Favorite players
-            </NavigationItem>
-        ) : null}
-        {props.isAuthenticated ? (
-            <NavigationItem link="/registrationPlayer">
-                Registration player
-            </NavigationItem>
-        ) : null}
+        {props.isAuthenticated ? <NavigationItem link="/favoritePlayers">Favorite players</NavigationItem> : null}
+        {props.isAuthenticated ? <NavigationItem link="/registrationPlayer">Registration player</NavigationItem> : null}
         {!props.isAuthenticated ? (
             <NavigationItem link="/auth">Authenticate</NavigationItem>
         ) : (
