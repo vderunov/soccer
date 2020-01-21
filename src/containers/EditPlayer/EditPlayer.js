@@ -2,22 +2,20 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Input from '../../components/UI/Input/Input';
-import classes from './RegistrationPlayer.module.css';
+import classes from './EditPlayer.module.css';
 import Button from '../../components/UI/Button/Button';
 import * as actions from '../../store/actions/index';
 import { checkValidity, updateObject } from '../../shared/utility';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import axios from '../../axios-players';
 import PropTypes from 'prop-types';
 
-class RegistrationPlayer extends Component {
+class EditPlayer extends Component {
     state = {
         registrationForm: {
             name: {
                 elementType: 'input',
                 label: 'Name',
-                value: '',
+                value: this.props.editPlayer.name,
                 elementConfig: {
                     type: 'text',
                     placeholder: 'Name'
@@ -32,7 +30,7 @@ class RegistrationPlayer extends Component {
             shoot: {
                 elementType: 'input',
                 label: 'Shoot',
-                value: '',
+                value: this.props.editPlayer.shoot,
                 elementConfig: {
                     type: 'number',
                     placeholder: 'Shoot',
@@ -51,7 +49,7 @@ class RegistrationPlayer extends Component {
             pass: {
                 elementType: 'input',
                 label: 'Pass',
-                value: '',
+                value: this.props.editPlayer.pass,
                 elementConfig: {
                     type: 'number',
                     placeholder: 'Pass',
@@ -70,7 +68,7 @@ class RegistrationPlayer extends Component {
             defense: {
                 elementType: 'input',
                 label: 'Defense',
-                value: '',
+                value: this.props.editPlayer.defense,
                 elementConfig: {
                     type: 'number',
                     placeholder: 'Defense',
@@ -89,7 +87,7 @@ class RegistrationPlayer extends Component {
             physical: {
                 elementType: 'input',
                 label: 'Physical',
-                value: '',
+                value: this.props.editPlayer.physical,
                 elementConfig: {
                     type: 'number',
                     placeholder: 'Physical',
@@ -108,7 +106,6 @@ class RegistrationPlayer extends Component {
             position: {
                 elementType: 'select',
                 label: 'Position',
-                value: 'halfback',
                 elementConfig: {
                     options: [
                         { value: 'goalkeeper', displayValue: 'Goalkeeper' },
@@ -127,7 +124,7 @@ class RegistrationPlayer extends Component {
             info: {
                 elementType: 'textarea',
                 label: 'Info',
-                value: '',
+                value: this.props.editPlayer.info,
                 valid: true,
                 elementConfig: {
                     type: 'text',
@@ -139,7 +136,7 @@ class RegistrationPlayer extends Component {
         formIsValid: false
     };
 
-    regPlayerHandler = event => {
+    editPlayerHandler = event => {
         event.preventDefault();
         const formData = {};
 
@@ -148,8 +145,12 @@ class RegistrationPlayer extends Component {
         }
 
         formData.userId = this.props.userId;
-        this.props.onRegisterPlayer(formData);
-        this.props.history.push('/');
+        formData.id = this.props.editPlayer.id;
+        this.props.onInitEditPlayer(formData);
+    };
+
+    onDeletePlayerHandler = () => {
+        this.props.onDeletePlayer(this.props.editPlayer);
     };
 
     inputChangedHandler = (event, inputIdentifier) => {
@@ -186,29 +187,33 @@ class RegistrationPlayer extends Component {
         let form = <Spinner />;
         if (!this.props.loading) {
             form = (
-                <form onSubmit={this.regPlayerHandler}>
-                    {formElementsArray.map(formElement => (
-                        <Input
-                            key={formElement.id}
-                            label={formElement.config.label}
-                            elementType={formElement.config.elementType}
-                            elementConfig={formElement.config.elementConfig}
-                            invalid={!formElement.config.valid}
-                            value={formElement.config.value}
-                            touched={formElement.config.touched}
-                            errorMessage={formElement.config.errorMessage}
-                            shouldValidate={formElement.config.validation}
-                            changed={event => this.inputChangedHandler(event, formElement.id)}
-                        />
-                    ))}
-                    <Button disabled={!this.state.formIsValid}>Register</Button>
-                </form>
+                <>
+                    <form onSubmit={this.editPlayerHandler}>
+                        {formElementsArray.map(formElement => (
+                            <Input
+                                key={formElement.id}
+                                label={formElement.config.label}
+                                elementType={formElement.config.elementType}
+                                elementConfig={formElement.config.elementConfig}
+                                invalid={!formElement.config.valid}
+                                value={formElement.config.value}
+                                touched={formElement.config.touched}
+                                errorMessage={formElement.config.errorMessage}
+                                shouldValidate={formElement.config.validation}
+                                changed={event => this.inputChangedHandler(event, formElement.id)}
+                            />
+                        ))}
+                        <Button disabled={!this.state.formIsValid}>Edit</Button>
+                    </form>
+                    <Button clicked={this.onDeletePlayerHandler}>Delete</Button>
+                    <Button clicked={() => this.props.history.push('/')}>Back</Button>
+                </>
             );
         }
         return (
             <>
-                <h1>Registration player</h1>
-                <div className={classes.RegistrationPlayer}>{form}</div>;
+                <h1>Edit player: {this.props.editPlayer.name}</h1>
+                <div className={classes.EditPlayer}>{form}</div>;
             </>
         );
     }
@@ -216,21 +221,27 @@ class RegistrationPlayer extends Component {
 
 const mapStateToProps = state => {
     return {
+        players: state.players.players,
         userId: state.auth.userId,
-        loading: state.players.loading
+        editPlayer: state.editPlayer.editPlayer,
+        loading: state.editPlayer.loading
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onRegisterPlayer: formData => dispatch(actions.registerPlayer(formData))
+        onDeletePlayer: formData => dispatch(actions.deletePlayer(formData)),
+        onInitEditPlayer: formData => dispatch(actions.initEditPlayer(formData))
     };
 };
 
-RegistrationPlayer.propTypes = {
+EditPlayer.propTypes = {
+    players: PropTypes.array,
     userId: PropTypes.string,
+    editPlayer: PropTypes.object,
     loading: PropTypes.bool,
-    onRegisterPlayer: PropTypes.func
+    onDeletePlayer: PropTypes.func,
+    onInitEditPlayer: PropTypes.func
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(RegistrationPlayer, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(EditPlayer);

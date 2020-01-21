@@ -1,10 +1,44 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-players';
 
-export const fetchFavoritePlayerSuccess = players => {
+export const deleteFavoritePlayerSuccess = playerData => {
+    return {
+        type: actionTypes.DELETE_FAVORITE_PLAYER_SUCCESS,
+        playerData
+    };
+};
+
+export const deleteFavoritePlayerFail = error => {
+    return {
+        type: actionTypes.DELETE_FAVORITE_PLAYER_FAIL,
+        error
+    };
+};
+
+export const deleteFavoritePlayerStart = () => {
+    return {
+        type: actionTypes.DELETE_FAVORITE_PLAYER_START
+    };
+};
+
+export const deleteFavoritePlayer = playerData => {
+    return dispatch => {
+        dispatch(deleteFavoritePlayerStart());
+        axios
+            .delete('/favoritePlayers/' + playerData.id + '.json')
+            .then(response => {
+                dispatch(deleteFavoritePlayerSuccess(playerData));
+            })
+            .catch(error => {
+                dispatch(deleteFavoritePlayerFail(error));
+            });
+    };
+};
+
+export const fetchFavoritePlayerSuccess = favoritePlayers => {
     return {
         type: actionTypes.FETCH_FAVORITE_PLAYER_SUCCESS,
-        players
+        favoritePlayers
     };
 };
 
@@ -67,7 +101,7 @@ export const addFavoritePlayer = (favoritePlayerData, token) => {
     return dispatch => {
         dispatch(addFavoritePlayerStart());
         axios
-            .post('favoritePlayers.json?auth=' + token, favoritePlayerData)
+            .post('/favoritePlayers.json?auth=' + token, favoritePlayerData)
             .then(response => {
                 dispatch(addFavoritePlayerSuccess(favoritePlayerData));
             })

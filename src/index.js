@@ -9,6 +9,7 @@ import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import playersReducer from './store/reducers/players';
 import favoritePlayerReducer from './store/reducers/favoritePlayer';
 import authReducer from './store/reducers/auth';
+import editPlayerReducer from './store/reducers/editPlayer';
 import thunk from 'redux-thunk';
 
 const composeEnhancers =
@@ -17,7 +18,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
     players: playersReducer,
     favoritePlayers: favoritePlayerReducer,
-    auth: authReducer
+    auth: authReducer,
+    editPlayer: editPlayerReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

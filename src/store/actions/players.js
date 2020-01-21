@@ -50,6 +50,7 @@ export const fetchPlayers = () => {
 };
 
 export const registerPlayerSuccess = (id, playerData) => {
+    playerData.id = id;
     return {
         type: actionTypes.REGISTER_PLAYER_SUCCESS,
         playerId: id,
@@ -74,7 +75,7 @@ export const registerPlayer = playerData => {
     return dispatch => {
         dispatch(registerPlayerStart());
         axios
-            .post('/players.son', playerData)
+            .post('/players.json', playerData)
             .then(response => {
                 dispatch(registerPlayerSuccess(response.data.name, playerData));
             })

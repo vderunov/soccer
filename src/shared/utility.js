@@ -5,6 +5,10 @@ export const updateObject = (oldObject, updatedProperties) => {
     };
 };
 
+export const removeItem = (array, action) => {
+    return array.filter(item => item.name !== action.name);
+};
+
 export const checkValidity = (value, rules) => {
     let isValid = true;
 

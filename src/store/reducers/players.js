@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     players: [],
     moreInfoPlayer: { name: 'No player selected' },
+    editPlayer: {},
     loading: false
 };
 
@@ -38,8 +39,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                id: action.playerId,
-                ...action.playerData
+                players: state.players.concat(action.playerData)
             };
         case actionTypes.REGISTER_PLAYER_FAIL:
             return {

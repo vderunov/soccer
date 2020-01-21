@@ -19,13 +19,21 @@ const PlayerCard = props => {
             <Button clicked={props.goToMoreInfo} data="moreInfo">
                 More info
             </Button>
-            {props.isAuth ? (
+            {props.isAuth && props.history.location.pathname === '/' ? (
                 <Button clicked={props.addFavoritePlayer} data="favorites">
                     Add to favorites
                 </Button>
             ) : null}
-
-            {props.isAuth ? <Button clicked={() => {}}>Edit</Button> : null}
+            {props.isAuth && props.history.location.pathname === '/' ? (
+                <Button clicked={props.goToEditPlayer} data="editPlayer">
+                    Edit
+                </Button>
+            ) : null}
+            {props.isAuth && props.history.location.pathname === '/favoritePlayers' ? (
+                <Button clicked={props.removePlayerFromFavorite} data="removePlayerFromFavorite">
+                    Remove from favorites
+                </Button>
+            ) : null}
         </div>
     );
 };

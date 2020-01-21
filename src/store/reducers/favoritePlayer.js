@@ -1,8 +1,10 @@
 import * as actionTypes from '../actions/actionTypes';
+import { removeItem } from '../../shared/utility';
 
 const initialState = {
     favoritePlayers: [],
-    loading: false
+    loading: false,
+    error: false
 };
 
 const reduce = (state = initialState, action) => {
@@ -16,17 +18,33 @@ const reduce = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                players: action.players
+                favoritePlayers: action.favoritePlayers
             };
         case actionTypes.FETCH_FAVORITE_PLAYER_FAIL:
             return {
                 ...state,
                 loading: false
             };
+        case actionTypes.DELETE_FAVORITE_PLAYER_SUCCESS:
+            const newArr = removeItem(state.favoritePlayers, action.playerData);
+            return {
+                ...state,
+                favoritePlayers: newArr
+            };
+        case actionTypes.DELETE_FAVORITE_PLAYER_FAIL:
+            return {
+                ...state,
+                error: action.error
+            };
+        case actionTypes.DELETE_FAVORITE_PLAYER_START:
+            return {
+                ...state
+            };
         case actionTypes.ADD_FAVORITE_PLAYER_SUCCESS:
             return {
                 ...state,
-                favoritePlayers: state.favoritePlayers.concat(action.favoritePlayerData)
+                favoritePlayers: state.favoritePlayers.concat(action.favoritePlayerData),
+                loading: false
             };
         case actionTypes.ADD_FAVORITE_PLAYER_FAIL:
             return {

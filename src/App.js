@@ -11,6 +11,7 @@ const RegistrationPlayer = lazy(() => import('./containers/RegistrationPlayer/Re
 const MoreInfo = lazy(() => import('./containers/MoreInfo/MoreInfo'));
 const FavoritePlayers = lazy(() => import('./containers/FavoritePlayers/FavoritePlayers'));
 const Auth = lazy(() => import('./containers/Auth/Auth'));
+const EditPlayer = lazy(() => import('./containers/EditPlayer/EditPlayer'));
 
 const App = props => {
     const { onTryAutoSignup } = props;
@@ -38,6 +39,7 @@ const App = props => {
                     <Route path="/auth" exact component={Auth} />
                     <Route path="/logout" exact component={Logout} />
                     <Route path="/moreInfo" exact component={MoreInfo} />
+                    <Route path="/editPlayer" exact component={EditPlayer} />
                     <Route path="/favoritePlayers" exact component={FavoritePlayers} />
                     <Route path="/" exact component={Team} />
                     <Redirect to="/" />

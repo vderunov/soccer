@@ -7,6 +7,7 @@ import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class Auth extends Component {
     state = {
@@ -134,4 +135,12 @@ const mapDispatchToProps = dispatch => {
         onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup))
     };
 };
+
+Auth.propTypes = {
+    loading: PropTypes.bool,
+    error: PropTypes.object,
+    isAuthentication: PropTypes.bool,
+    onAuth: PropTypes.func
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
