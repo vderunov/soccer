@@ -22,4 +22,8 @@ describe('<Toolbar />', () => {
     it('should render one <Logo />  element', () => {
         expect(wrapper.find(Logo)).toHaveLength(1);
     });
+
+    it('should render <header />  element', () => {
+        expect(wrapper.find('header'));
+    });
 });

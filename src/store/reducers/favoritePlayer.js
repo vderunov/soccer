@@ -29,16 +29,19 @@ const reduce = (state = initialState, action) => {
             const newArr = removeItem(state.favoritePlayers, action.playerData);
             return {
                 ...state,
+                loading: false,
                 favoritePlayers: newArr
             };
         case actionTypes.DELETE_FAVORITE_PLAYER_FAIL:
             return {
                 ...state,
+                loading: false,
                 error: action.error
             };
         case actionTypes.DELETE_FAVORITE_PLAYER_START:
             return {
-                ...state
+                ...state,
+                loading: true
             };
         case actionTypes.ADD_FAVORITE_PLAYER_SUCCESS:
             return {
